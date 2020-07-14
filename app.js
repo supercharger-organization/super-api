@@ -14,12 +14,7 @@ const startup = require("./routes/startup");
 const team = require("./routes/team");
 const user_account = require("./routes/user_account");
 
-if (process.env.NODE_ENV == 'dev') {
-    mongoose.connect('mongodb://localhost:27017/SDB_Testing');
-}
-else {
-    mongoose.connect(`mongodb://${process.env.HOST}/SDB_Testing`);
-}
+mongoose.connect(`mongodb://${process.env.HOST}/SDB_Testing`);
 
 mongoose.connection.on('connected', ()=>{
     console.log('Connected to database mongodb @ 27017');

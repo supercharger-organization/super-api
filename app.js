@@ -6,8 +6,6 @@ var path = require('path');
 
 var app = express();
 
-//Existing API routes:
-//const cards = require("./routes/deprecated/cards");
 const board = require("./routes/board");
 const list = require("./routes/list");
 const debug = require("./routes/debug");
@@ -16,9 +14,12 @@ const startup = require("./routes/startup");
 const team = require("./routes/team");
 const user_account = require("./routes/user_account");
 
-mongoose.connect('mongodb://localhost:27017/SDB_Testing'); //uncomment for local debugging
-
-//mongoose.connect('mongodb://db:27017/SDB_Testing'); //uncomment for docker
+if (process.env.NODE_ENV == 'dev') {
+    mongoose.connect('mongodb://localhost:27017/SDB_Testing');
+}
+else {
+    mongoose.connect('mongodb://db:27017/SDB_Testing');
+}
 
 mongoose.connection.on('connected', ()=>{
     console.log('Connected to database mongodb @ 27017');
@@ -29,8 +30,6 @@ mongoose.connection.on('error', (err)=>{
         console.log('Error in database connection: ', err)
     }
 })
-
-const port = 3000;
 
 app.use(cors());
 
@@ -61,6 +60,6 @@ app.get('/', (req, res)=>{
     res.send('Comin at ya live, mr 305 from yo working express api')
 })
 
-app.listen(port,()=>{
-    console.log('Server started at port: ' + port)
+app.listen(process.env.PORT,()=>{
+    console.log('Server started at port: ' + process.env.PORT)
 })

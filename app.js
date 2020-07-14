@@ -18,7 +18,7 @@ if (process.env.NODE_ENV == 'dev') {
     mongoose.connect('mongodb://localhost:27017/SDB_Testing');
 }
 else {
-    mongoose.connect('mongodb://db:27017/SDB_Testing');
+    mongoose.connect(`mongodb://${process.env.HOST}/SDB_Testing`);
 }
 
 mongoose.connection.on('connected', ()=>{

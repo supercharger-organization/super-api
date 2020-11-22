@@ -50,27 +50,30 @@ router.get('/:_id/w_children', (req, res, next)=>{
 });
 
 router.post('/post', (req, res, next)=>{
-    let newColumn = new List({
-        title: req.body.title,
-        position: req.body.position,
-        boardId: req.body.boardId,
-        cardIds: req.body.cardIds,
-    })
-
-    newColumn.save((err, column)=>{
-        if (err){
-            res.json({msg: "Failed to add Column"});
+    var rawList = req.body.list;
+    // If no object return an error message
+    if (rawList == null)
+    {
+        res.json({ message: "ERROR!! Please add a json object \"list\" to the post body"})
+    }
+    else{
+        if (!rawList._id){
+            var list = new List(rawList);
         }
-        else {
-            res.json({msg: "Column added successfully"});
+        else{
+            var list = rawList;
         }
-    })
+        // if passed object do a lookup of it. if doesnt exist save as is, overwrite if found. return complete new document
+        List.findOneAndUpdate({_id: list._id}, list, {new: true, upsert: true, overwrite:true}, function(err, doc){
+            res.json({ err: err, currentObject: doc, message: "Transaction complete!"})
+        });
+    }
 });
 
 router.post('/update', (req, res, next)=>{
 
     console.log(req.body._id);
-    Note.findOneAndUpdate({_id: req.body._id}, 
+    List.findOneAndUpdate({_id: req.body._id}, 
     {
         title: req.body.title,
         position: req.body.position,

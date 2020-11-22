@@ -4,6 +4,8 @@ const Schema = mongoose.Schema;
 const FKHelper = require('./helpers/foreign-key-helper');
 
 const Note = require('../models/note');
+const Patent = require('../models/patent');
+const Feature = require('../models/feature');
 
 const StartupSchema = Schema({
     // ~~~~~~ Universal Schema Contents:
@@ -16,6 +18,12 @@ const StartupSchema = Schema({
     // ~~~~~~ Custom Schema Contents:
     // Default properties specific to just this item
     name:{
+        type: String,
+        required: true,
+        maxlength: 50,
+        minlength: 4
+    },
+    yearFounded:{
         type: String,
         required: true,
         maxlength: 50,
@@ -48,7 +56,7 @@ const StartupSchema = Schema({
     location:{
         type: String,
         required: false,
-        maxlength: 60,
+        maxlength: 200,
         minlength: 0,
         default: "N/A"
     },
@@ -66,6 +74,13 @@ const StartupSchema = Schema({
         minlength: 0,
         default: "N/A"
     },
+    industryScore:{
+        type: String,
+        required: false,
+        maxlength: 24,
+        minlength: 0,
+        default: "N/A"
+    },
     funding:{
         type: String,
         required: false,
@@ -73,10 +88,24 @@ const StartupSchema = Schema({
         minlength: 0,
         default: "N/A"
     },
+    lastFunding:{
+        type: String,
+        required: false,
+        maxlength: 50,
+        minlength: 0,
+        default: "N/A"
+    },
     cac:{
         type: String,
         required: false,
         maxlength: 24,
+        minlength: 0,
+        default: "N/A"
+    },
+    pricing:{
+        type: String,
+        required: false,
+        maxlength: 40,
         minlength: 0,
         default: "N/A"
     },
@@ -101,6 +130,13 @@ const StartupSchema = Schema({
         minlength: 0,
         default: "N/A"
     }],
+    employeeNames:[{
+        type: String,
+        required: false,
+        maxlength: 200,
+        minlength: 0,
+        default: "N/A"
+    }],
     founderBackground:{
         type: String,
         required: false,
@@ -112,6 +148,13 @@ const StartupSchema = Schema({
         type: String,
         required: false,
         maxlength: 500,
+        minlength: 0,
+        default: "N/A"
+    },
+    founderName:{
+        type: String,
+        required: false,
+        maxlength: 200,
         minlength: 0,
         default: "N/A"
     },
@@ -150,9 +193,139 @@ const StartupSchema = Schema({
         default: "N/A"
     }],
 
+    tags: [{
+        type: String,
+        required: false,
+        maxlength: 200,
+        minlength: 0,
+        default: "N/A"
+    }],
+
+    // New image URL fields
+    /*pitchDeckImgUrls: string[] -> {bucket}/imgs/pitchDeckImgs/{fileName}
+	pagerImgUrl: string -> {bucket}/pagerImgs/{fileName}
+	startupImgUrl: string -> {bucket}/startupImgs/{fileName}
+	historyImgUrl: string -> {bucket}/historyImgs/{fileName}
+	customerImgUrls: string[] -> {bucket}/customerImgs/{fileName}*/
+
+    // single image urls
+    pagerImgUrl: {
+        type: String,
+        required: false,
+        maxlength: 200,
+        minlength: 0,
+        default: "N/A"
+    },
+    startupImgUrl: {
+        type: String,
+        required: false,
+        maxlength: 200,
+        minlength: 0,
+        default: "N/A"
+    },
+    historyImgUrl: {
+        type: String,
+        required: false,
+        maxlength: 200,
+        minlength: 0,
+        default: "N/A"
+    },
+    
+    // Not implemented yet
+    videoUrl: {
+        type: String,
+        required: false,
+        maxlength: 200,
+        minlength: 0,
+        default: "N/A"
+    },
+
+    patents: [Schema({
+            living:  { type: Boolean, default: true }, // Will allow for deletion recovery in the future
+            updated: { type: Date, default: Date.now },
+        
+            title:{
+                type: String,
+                required: false,
+                maxlength: 50,
+                minlength: 0,
+                default: "N/A"
+            },
+            number:{
+                type: String,
+                required: false,
+                maxlength: 50,
+                minlength: 0,
+                default: "N/A"
+            },
+            abstract: {
+                type: String,
+                required: false,
+                maxlength: 1000,
+                minlength: 0,
+                default: "N/A"
+            },
+            type:{
+                type: String,
+                required: false,
+                maxlength: 50,
+                minlength: 0,
+                default: "N/A"
+            },
+            filled:{
+                type: String,
+                required: false,
+                maxlength: 50,
+                minlength: 0,
+                default: "N/A"
+            },
+            date:{
+                type: String,
+                required: false,
+                maxlength: 50,
+                minlength: 0,
+                default: "N/A"
+            }
+        })],
+    
+    features: [Schema({
+            living:  { type: Boolean, default: true }, // Will allow for deletion recovery in the future
+            updated: { type: Date, default: Date.now },
+            title:{
+                type: String,
+                required: false,
+                maxlength: 50,
+                minlength: 0,
+                default: "N/A"
+            },
+            description: {
+                type: String,
+                required: false,
+                maxlength: 500,
+                minlength: 0,
+                default: "N/A"
+            }
+        })],
+
+    // Image url arrays
+    pitchDeckImgUrls: [{
+        type: String,
+        required: false,
+        maxlength: 200,
+        minlength: 0,
+        default: "N/A"
+    }],
+    customerImgUrls: [{
+        type: String,
+        required: false,
+        maxlength: 200,
+        minlength: 0,
+        default: "N/A"
+    }],
     // FOREIGN KEYS:
     // Child items of this object
     customNotes: [Schema.Types.ObjectId],  // Stores the IDs of the notes made by teams on their startup data
 })
+
 
 const Startup = module.exports = mongoose.model('startups', StartupSchema);

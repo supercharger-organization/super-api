@@ -5,7 +5,7 @@ const Feature = require('../models/feature')
 const Patent = require('../models/patent');
 const { json } = require('body-parser');
 
-router.get('/all', (req, res, next)=>{
+router.get('/', (req, res, next)=>{
     Startup.find(function(err, Startups){
         res.json(Startups)
     })
@@ -35,20 +35,20 @@ router.get('/template', (req, res, next)=>{
 
 // Return just the startup matching the id passed
 
-router.get('/:_id', (req, res, next)=>{
+router.get('/:id', (req, res, next)=>{
     //console.log("ID Passed: " + req.params._id);
-    Startup.find({_id: req.params._id}, function(err,startup){
+    Startup.find({_id: req.params.id}, function(err,startup){
         //console.log("Obj Found: ");
         //console.log(card);
         if (startup) {
             res.json(startup);
         } else {
-            res.json({ message: `item ${req.params._id} doesn't exist`})
+            res.json({ message: `item ${req.params.id} doesn't exist`})
         }
     });
 });
 
-router.post('/post', (req, res, next)=>{
+router.post("/", (req, res, next)=>{
     var rawStartup = req.body.startup;
     // If no object return an error message
     if (rawStartup == null)
@@ -69,7 +69,7 @@ router.post('/post', (req, res, next)=>{
     }
 });
 
-router.delete('/delete/:id', (req, res, next)=>{
+router.delete('/:id', (req, res, next)=>{
     Startup.remove({_id: req.params.id}, function(err, result){
         if (err){
             res.json(err)

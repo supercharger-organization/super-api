@@ -6,7 +6,7 @@ const Startup = require('../models/startup');
 const startup = require('../models/startup');
 const { populate } = require('../models/startup');
 
-router.get('/all', (req, res, next)=>{
+router.get('/', (req, res, next)=>{
     Board.find(function(err, Boards){
         res.json(Boards)
     })
@@ -30,9 +30,9 @@ router.get('/all_w_children', (req, res, next)=>{
 });*/
 
 // Return just the board matching the id passed
-router.get('/:_id/w_children', (req, res, next)=>{
+router.get('/:id/w_children', (req, res, next)=>{
     //console.log("ID Passed: " + req.params._id);
-    Board.find({_id: req.params._id})
+    Board.find({_id: req.params.id})
     .populate({
         path: 'lists',
         populate:{
@@ -79,9 +79,9 @@ router.get('/template', (req, res, next)=>{
 });
 
 // Return just the board matching the id passed
-router.get('/:_id', (req, res, next)=>{
+router.get('/:id', (req, res, next)=>{
     //console.log("ID Passed: " + req.params._id);
-    Board.find({_id: req.params._id}, function(err,board){
+    Board.find({_id: req.params.id}, function(err,board){
         if (board) {
             console.log(board);
             res.json(board);
@@ -110,7 +110,7 @@ router.post('/update', (req, res, next)=>{
     });
 });
 
-router.delete('/delete/:id', (req, res, next)=>{
+router.delete('/:id', (req, res, next)=>{
     Board.remove({_id: req.params.id}, function(err, result){
         if (err){
             res.json(err)

@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Note = require('../models/note')
 
-router.get('/all', (req, res, next)=>{
+router.get('/', (req, res, next)=>{
     Column.find(function(err, cards){
         res.json(cards)
     })
@@ -23,20 +23,20 @@ router.get('/template', (req, res, next)=>{
 
 
 // Return just the note matching the id passed
-router.get('/:_id', (req, res, next)=>{
+router.get('/:id', (req, res, next)=>{
     //console.log("ID Passed: " + req.params._id);
-    Note.find({_id: req.params._id}, function(err,note){
+    Note.find({_id: req.params.id}, function(err,note){
         //console.log("Obj Found: ");
         //console.log(card);
         if (note) {
             res.json(note);
         } else {
-            res.json({ message: `item ${req.params._id} doesn't exist`})
+            res.json({ message: `item ${req.params.id} doesn't exist`})
         }
     });
 });
 
-router.post('/post', (req, res, next)=>{
+router.post('/', (req, res, next)=>{
     let newNote = new Note({
         note: req.body.note,
         title: req.body.title,
@@ -73,7 +73,7 @@ router.post('/update', (req, res, next)=>{
     });
 });
 
-router.delete('/delete/:id', (req, res, next)=>{
+router.delete('/:id', (req, res, next)=>{
     Column.remove({_id: req.params.id}, function(err, result){
         if (err){
             res.json(err)

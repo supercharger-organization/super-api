@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/user_account')
 
-router.get('/all', (req, res, next)=>{
+router.get('/', (req, res, next)=>{
     User.find(function(err, Users){
         res.json(Users)
     })
@@ -18,9 +18,9 @@ router.get('/template', (req, res, next)=>{
 });
 
 // Return just the note matching the id passed
-router.get('/:_id', (req, res, next)=>{
+router.get('/:id', (req, res, next)=>{
     //console.log("ID Passed: " + req.params._id);
-    User.find({_id: req.params._id}, function(err,user){
+    User.find({_id: req.params.id}, function(err,user){
         //console.log("Obj Found: ");
         //console.log(card);
         if (user) {
@@ -49,7 +49,7 @@ router.post('/validate', (req, res, next)=>{
 });
 
 
-router.post('/post', (req, res, next)=>{
+router.post('/', (req, res, next)=>{
     let newUser = new User({
         userName: req.body.userName,
         password: req.body.password,
@@ -66,7 +66,7 @@ router.post('/post', (req, res, next)=>{
     })
 });
 
-router.delete('/delete/:id', (req, res, next)=>{
+router.delete('/:id', (req, res, next)=>{
     User.remove({_id: req.params.id}, function(err, result){
         if (err){
             res.json(err)

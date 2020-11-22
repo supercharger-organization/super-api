@@ -1,8 +1,6 @@
 # incomplete
-
 mongodb-prod := 18.224.58.238:27017
 mongodb-dev := host.docker.internal
-
 
 docker-build:
 	docker build --tag super-api:1.0 .

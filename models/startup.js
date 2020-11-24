@@ -322,6 +322,28 @@ const StartupSchema = Schema({
         minlength: 0,
         default: "N/A"
     }],
+    employeeNum:{
+        type: Number,
+        required: true,
+        maxlength: 50,
+        minlength: 1,
+        default: 0
+    },
+    fundingNum:{
+        type: Number,
+        required: true,
+        maxlength: 50,
+        minlength: 1,
+        default: 0
+    },
+    locationNum:{
+        type: Number,
+        required: true,
+        maxlength: 50,
+        minlength: 1,
+        default: 0
+    },
+    
     // FOREIGN KEYS:
     // Child items of this object
     customNotes: [Schema.Types.ObjectId],  // Stores the IDs of the notes made by teams on their startup data

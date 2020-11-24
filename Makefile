@@ -1,5 +1,6 @@
 # incomplete
-mongodb-prod := 18.224.58.238:27017
+# mongodb-prod := 3.128.254.245:27017
+mongodb-prod := 3.128.254.245:27017
 mongodb-dev := host.docker.internal
 
 docker-build:

@@ -13,6 +13,7 @@ const note = require("./routes/note");
 const startup = require("./routes/startup");
 const team = require("./routes/team");
 const user_account = require("./routes/user_account");
+const mailer = require("./routes/mailer");
 
 mongoose.connect(`mongodb://${process.env.HOST}/SDB_Testing`);
 
@@ -39,6 +40,7 @@ app.use('/note', note);
 app.use('/startup', startup);
 app.use('/team', team);
 app.use('/user', user_account);
+app.use('/mailer', mailer)
 
 // Plan on implementing a testing script right here for some 
 // entry level testing

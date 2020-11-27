@@ -1,11 +1,27 @@
 const express = require('express');
+const list = require('../models/list');
 const router = express.Router();
 const List = require('../models/list')
 
-router.get('/', (req, res, next)=>{
+router.get('', (req, res, next)=>{
     List.find(function(err, Columns){
         res.json(Columns)
     })
+});
+
+router.get('/w_children', (req, res, next)=>{
+    List.find()
+    .populate({
+        path: 'startups'
+    })
+    .then(function(result)
+    {
+        res.json(result);
+    })
+    .catch(function(err) {
+    // If an error occurred, send it to the client
+    res.json(err);
+    });
 });
 
 router.get('/template', (req, res, next)=>{
@@ -49,6 +65,21 @@ router.get('/:id/w_children', (req, res, next)=>{
     });
 });
 
+// router.get('/w_children', (req, res, next)=>{
+//     List.find()
+//     .populate({
+//         path: 'startups'
+//     })
+//     .then(function(result)
+//     {
+//         res.json(result);
+//     })
+//     .catch(function(err) {
+//     // If an error occurred, send it to the client
+//     res.json(err);
+//     });
+// });
+
 router.post('/', (req, res, next)=>{
     var rawList = req.body.list;
     // If no object return an error message
@@ -70,15 +101,44 @@ router.post('/', (req, res, next)=>{
     }
 });
 
-router.post('/update', (req, res, next)=>{
+//add startup to list
+router.post('/:id/startup/:startupId', (req, res, next)=>{
 
-    console.log(req.body._id);
-    List.findOneAndUpdate({_id: req.body._id}, 
+    let listId = req.params.id;
+    let startupId = req.params.startupId;
+    console.log(listId, startupId)
+
+    List.findOneAndUpdate(
+        {_id: listId},
+        { $addToSet: { startups: startupId  } },
+        function (error, success) {
+            res.json({ message: `list updated`});
+        }
+    );
+});
+
+//del startup from list
+router.delete('/:id/startup/:startupId', (req, res, next)=>{
+
+    let listId = req.params.id;
+    let startupId = req.params.startupId;
+    List.findOneAndUpdate(
+        {_id: listId},
+        { $pull: { startups: startupId  } },
+        function (error, success) {
+            res.json({ message: `list updated`});
+        }
+    );
+});
+
+router.patch('/:id', (req, res, next)=>{
+
+    List.findOneAndUpdate({_id: req.params.id}, 
     {
         title: req.body.title,
         position: req.body.position,
         boardId: req.body.boardId,
-        startupIds: req.body.startupIds
+        startups: req.body.startups
     }).then(function(){
         res.json({ message: `list updated`});
     });

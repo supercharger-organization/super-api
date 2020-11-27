@@ -46,7 +46,7 @@ const ListSchema = Schema({
     // Startup position is stored on the cards and must be updated each move
     startups: [{
 		type: Schema.ObjectId,
-		ref: 'startups',
+        ref: 'startups',
 		validate: {
 			isAsync: true,
 			validator: function(v) {
@@ -54,7 +54,8 @@ const ListSchema = Schema({
 			},
 			message: `Card doesn't exist`
 		}
-	}] // Note, this is how we store an array of object IDs as a member variable
+    }] // Note, this is how we store an array of object IDs as a member variable
+    
 });
 
 const List = module.exports = mongoose.model('list', ListSchema);

@@ -23,7 +23,7 @@ router.post('', (req, res, next)=>{
     
     var mailOptions = {
         from: 'superchargertest@gmail.com', // sender address
-        to: 'rrossilli55@gmail.com', // list of receivers
+        to: 'rrossilli55@gmail.com, kwang@chta.ventures ', // list of receivers
         subject: 'Supercharger', // Subject line
         html: body// plain text body
       };
